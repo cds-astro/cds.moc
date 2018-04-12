@@ -1,0 +1,46 @@
+
+README
+------
+Authors: Pierre Fernique [Centre de Donnees astronomiques de Strasbourg]
+Licence: GPL3
+
+1) What is a MOC => http://ivoa.net/documents/MOC/
+2) Where is the "main" class of this lib => cds.moc.HealpixMoc
+3) How to use MOC => cds.moc.MocExample.java
+4) How to check that my MOC is valid: http://alasky.u-strasbg.fr/MocServer/lint
+5) Examples: 
+
+a) Create and save a MOC:
+
+   // Assuming that you have a Collection/array of longs
+   // which represent the Healpix (NESTED) cell numbers of your spatial region
+   // at a dedicated "order" (note: order = HealpixMoc.log2(nside) ).
+   // You want to create the MOC a save it in a file.
+   HealpixMoc moc = new HealpixMoc();
+   moc.add( order, array );
+   moc.write( filename );
+
+b) Load and compare MOCs:
+
+   // You want to load a MOC from a file and compute the intersection with
+   // a spatial region that you provide as a MOC (written in ASCII format)
+   HealpixMoc moc, myMoc, interMoc;
+   moc = new HealpixMoc();
+   mod.read( filename );
+   myMoc = new HealpixMoc("3/1,2,3 4/17-19");
+   interMoc = moc.intersection( myMoc );
+   
+c) Generate a MOC from a Collection of sky coordinates
+
+   // You want to generate the MOC covering a set of sky positions.
+   // The MOC is generated at a dedicated resolution "mocOrder=13"
+   // Note: angRes = Math.sqrt( 4*Math.PI/(12*HealpixMoc.pow2(order) * 
+   //                                         HealpixMoc.pow2(order) ) )
+
+   HealpixMoc moc = new HealpixMoc(13);
+   Healpix hpx = new Healpix();
+   for( int i=0; i<100000; i++ ) {
+      double lon = Math.random()*360;
+      double lat = Math.random()*180 -90;
+      moc.add( hpx, lon, lat);
+   }
